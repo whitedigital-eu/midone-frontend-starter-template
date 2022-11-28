@@ -1,0 +1,33 @@
+
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "importHelpers": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "baseUrl": ".",
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable"
+    ],
+    "types": ["vite/client", "vitest"],
+    "plugins": [
+      { "name": "@vuedx/typescript-plugin-vue" },
+      { "name": "eslint-plugin-import-access" }
+    ],
+    "strict": true,
+    "noImplicitAny": false,
+  },
+  "include": ["resources/**/*.ts", "resources/**/*.d.ts", "resources/**/*.tsx", "resources/**/*.vue"],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
