@@ -1,10 +1,10 @@
 <template>
   <Tippy
-    :tag="tag"
     :options="{
       placement: 'left',
     }"
     ref-key="sideMenuTooltipRef"
+    :tag="tag"
   >
     <slot></slot>
   </Tippy>
@@ -15,14 +15,7 @@ import { provide, ref, onMounted } from 'vue'
 //@ts-ignore
 import dom from '@left4code/tw-starter/dist/js/dom'
 
-const props = withDefaults(
-  defineProps<{
-    tag?: string
-  }>(),
-  {
-    tag: 'span',
-  }
-)
+const { tag = 'span' } = defineProps<{ tag?: string }>()
 
 const tippyRef = ref()
 

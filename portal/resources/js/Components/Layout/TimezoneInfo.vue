@@ -1,5 +1,5 @@
 <template>
-  <div class="box px-2 md:p-2 bg-white flex flex-col">
+  <div class="bg-white box flex flex-col md:p-2 px-2">
     <span>Laika zona: Rīga, Latvija</span>
     <span>Pareizs laiks: {{ currentTime }}</span>
   </div>

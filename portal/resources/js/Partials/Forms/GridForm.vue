@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid relative gap-4 grid-cols-1"
+    class="gap-4 grid grid-cols-1 relative"
     :class="computedGridColsClass"
     data-role="grid-form"
   >
@@ -15,17 +15,17 @@
         :data-has-error="formField.errors && formField.errors.length > 0"
       >
         <component
-          :is="getComponent(formField.type)"
+          :is="getComponent(formField.type as keyof typeof inputTypeToComponent) as any"
           v-bind="getComponentAttributes(formField)"
           v-model="formField.value"
           class="my-4"
-          v-on="getEventHandlers(formField)"
+          v-on="getEventHandlers(formField, emit)"
         />
         <ul v-if="formField.errors && formField.errors.length">
           <li
             v-for="(message, k) in formField.errors"
             :key="k"
-            class="text-danger mb-4"
+            class="mb-4 text-danger"
           >
             {{ message }}
           </li>
@@ -36,47 +36,34 @@
 </template>
 
 <script setup lang="ts">
-import { watch, ref, computed } from 'vue'
+import { watch, ref, computed, Ref, UnwrapRef } from 'vue'
 
-import { getComponentAttributes, getComponent } from './shared'
+import {
+  getComponentAttributes,
+  getComponent,
+  getEventHandlers,
+  inputTypeToComponent,
+} from './shared'
 
 import { FormData } from 'wd-frontend-shared/types/FormData'
+import { File } from '../../Types/File'
 
-const props = withDefaults(
-  defineProps<{
-    formData: FormData
-    formLayout: string[][]
-    cols?: 1 | 2 | 3 | 4 | 5
-  }>(),
-  {
-    cols: 2,
-  }
-)
+const { cols = 2, ...props } = defineProps<{
+  formData: FormData
+  formLayout: string[][]
+  cols?: 1 | 2 | 3 | 4 | 5
+}>()
 
-const emit = defineEmits([
-  'update:modelValue',
-  'select-create-new-item',
-  'remove-file',
-])
-
-const getEventHandlers = (formField: any) => {
-  if (
-    formField.type === 'simple-select' ||
-    formField.type === 'data-fetching-select'
-  ) {
-    return {
-      'create-new-item': (item: any) =>
-        emit('select-create-new-item', formField.name, item),
-    }
-  } else if (formField.type === 'file-upload') {
-    return {
-      'remove-file': (fileIri: string, callback: any) =>
-        emit('remove-file', formField.name, fileIri, callback),
-    }
-  }
-
-  return {}
-}
+const emit = defineEmits<{
+  (e: 'update:modelValue', formData: Ref<UnwrapRef<FormData>>): void
+  (e: 'select-create-new-item', fieldName: string, item: string): void
+  (
+    e: 'remove-file',
+    fieldName: string,
+    fileIri: File['@id'],
+    callback: (...args: any[]) => void
+  ): void
+}>()
 
 const formData = ref<FormData>(props.formData)
 
@@ -87,7 +74,7 @@ const formDataInLayout = props.formLayout.map((gridItem: string[]) => {
 watch(formData, () => emit('update:modelValue', formData), { deep: true })
 
 const computedGridColsClass = computed(() => {
-  switch (props.cols) {
+  switch (cols) {
     case 1:
       return `sm:grid-cols-1`
     case 2:

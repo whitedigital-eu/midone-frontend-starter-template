@@ -1,5 +1,5 @@
 <template>
-  <button class="btn bg-white" :class="iconPaddingClass" :data-test="dataTest">
+  <button class="bg-white btn" :class="iconPaddingClass" :data-test="dataTest">
     <component :is="icon" :size="iconSizeComputed" />
   </button>
 </template>
@@ -21,7 +21,7 @@ const icon = computed(() => {
   }[props.action]
 })
 
-const iconSizeComputed = computed(() => (props.small ? '16' : '24'))
+const iconSizeComputed = computed(() => (props.small ? 16 : 24))
 const iconPaddingClass = computed(() =>
   props.small ? 'py-1 px-2' : 'py-2 px-4'
 )

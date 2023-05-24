@@ -2,10 +2,10 @@
   <nav
     v-if="breadcrumbs"
     aria-label="breadcrumb"
-    class="-intro-x h-[45px] flex-1"
+    class="-intro-x flex-1 h-[45px]"
     data-test="breadcrumbs"
   >
-    <ol class="breadcrumb breadcrumb-light text-lg overflow-hidden flex">
+    <ol class="breadcrumb breadcrumb-light flex overflow-hidden text-lg">
       <li
         v-for="(breadcrumb, i) in breadcrumbs"
         :key="i"
@@ -48,40 +48,11 @@ const routeToBreadcrumbs = (route: RouteLocationNormalized): Breadcrumb[] => {
   const serviceRequestBreadcrumb = new Breadcrumb('Izsaukumi', {
     name: 'SERVICE_REQUESTS',
   })
-  const contractsBreadcrumb = new Breadcrumb('Līgumi', {
-    name: 'CONTRACTS',
-  })
-  const offerTemplateBreadcrumb = new Breadcrumb('Piedāvājumu sagataves', {
-    name: 'OFFER_TEMPLATES',
-  })
-  const estimateBreadcrumb = new Breadcrumb('Tāmes', {
-    name: 'ESTIMATES',
-  })
   const acceptanceCertificateBreadcrumb = new Breadcrumb('Akti', {
     name: 'ACCEPTANCE_CERTIFICATES',
   })
 
   switch (route.name) {
-    case 'CUSTOMERS':
-      items = [customersBreadcrumb]
-      break
-    case 'VIEW_CUSTOMER':
-      items = [customersBreadcrumb]
-      if (breadcrumbData.customerTitle) {
-        items.push(
-          new Breadcrumb(`Apskatīt klientu ${breadcrumbData.customerTitle}`)
-        )
-      }
-      break
-    case 'SERVICE_REQUESTS':
-      items = [serviceRequestBreadcrumb]
-      break
-    case 'VIEW_SERVICE_REQUEST':
-      items = [
-        serviceRequestBreadcrumb,
-        new Breadcrumb(`Apskatīt izsaukumu ${route.params.id}`),
-      ]
-      break
     case 'USERS':
       items = [new Breadcrumb('Lietotāji')]
       break
@@ -91,47 +62,10 @@ const routeToBreadcrumbs = (route: RouteLocationNormalized): Breadcrumb[] => {
     case 'AUDITS':
       items = [new Breadcrumb('Auditi')]
       break
-    case 'USER_ROLES_PERMISSIONS':
-      items = [new Breadcrumb('Lietotāju lomas un tiesības')]
+    case 'PROFILE':
+      items = [new Breadcrumb('Mans profils')]
       break
-    case 'OFFER_TEMPLATES':
-      items = [offerTemplateBreadcrumb]
-      break
-    case 'VIEW_OFFER_TEMPLATE':
-      items = [offerTemplateBreadcrumb]
-      if (breadcrumbData.offerTemplateTitle) {
-        items.push(
-          new Breadcrumb(
-            `Apskatīt piedāvājuma sagatavi ${breadcrumbData.offerTemplateTitle}`
-          )
-        )
-      }
-      break
-    case 'ESTIMATES':
-      items = [estimateBreadcrumb]
-      break
-    case 'VIEW_ESTIMATE':
-      items = [estimateBreadcrumb]
-      if (breadcrumbData.estimateNr) {
-        items.push(new Breadcrumb(`Apskatīt tāmi ${breadcrumbData.estimateNr}`))
-      }
-      break
-    case 'ACCEPTANCE_CERTIFICATES':
-      items = [acceptanceCertificateBreadcrumb]
-      break
-    case 'MEASUREMENT_UNITS':
-      items = [new Breadcrumb('Mērvienības')]
-      break
-    case 'CONTRACTS':
-      items = [contractsBreadcrumb]
-      break
-    case 'VIEW_CONTRACT':
-      items = [contractsBreadcrumb]
-      if (breadcrumbData.contractNr) {
-        items.push(
-          new Breadcrumb(`Apskatīt līgumu ${breadcrumbData.contractNr}`)
-        )
-      }
+    default:
       break
   }
 
@@ -149,6 +83,7 @@ const breadcrumbs = computed<Breadcrumb[] | null>(() => {
 
 const setPageTitle = (bc: typeof breadcrumbs.value) => {
   if (!bc?.length) return
+  // TODO: set default title
   const baseTitle = import.meta.env.VITE_APP_TITLE ?? ''
   document.title = `${bc[bc.length - 1].text} | ${baseTitle}`
 }

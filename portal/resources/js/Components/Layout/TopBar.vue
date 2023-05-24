@@ -1,93 +1,95 @@
 <template>
   <div
-    class="top-bar-boxed min-h-[unset] md:min-h-[65px] z-[51] border-b border-white/[0.08] -mt-7 md:mt-0 -mx-3 sm:-mx-8 md:-mx-0 px-3 md:border-b-0 relative md:fixed md:inset-x-0 md:top-0 sm:px-8 md:px-10 md:pt-7 md:bg-gradient-to-b md:from-slate-100 md:to-transparent dark:md:from-darkmode-700"
+    class="-mt-7 -mx-3 border-b border-white/[0.08] dark:md:from-darkmode-700 md:-mx-0 md:border-b-0 md:fixed md:from-slate-100 md:inset-x-0 md:min-h-[65px] md:mt-0 md:pt-7 md:px-10 md:to-transparent md:top-0 min-h-[unset] px-3 relative sm:-mx-8 sm:px-8 top-bar-boxed z-[51]"
   >
     <div
-      class="h-full flex flex-col sm:flex-row justify-between gap-4 items-left xl:items-center"
+      class="flex flex-col gap-4 h-full items-left justify-between sm:flex-row xl:items-center"
     >
-      <div class="flex items-center flex-1">
-        <span class="logo -intro-x hidden md:flex w-[180px] block">
+      <div class="flex flex-1 items-center">
+        <span class="-intro-x block hidden logo md:flex w-[180px]">
+          <!-- TODO: add logo source and alt text -->
           <img
             alt=""
             class="logo__image"
-            src="/images/logos/logo.png"
+            src=""
           />
         </span>
         <Breadcrumbs />
       </div>
 
       <div
-        class="hidden md:flex xl:order-3 flex items-center gap-4 ml-auto mb-2 basis-[215px] flex-shrink-0"
+        class="basis-[215px] flex flex-shrink-0 gap-4 hidden items-center mb-2 md:flex ml-auto xl:order-3"
       >
         <TimezoneInfo class="ml-auto z-[1]" />
 
         <ProfileDropdown />
       </div>
 
-<!--      <div-->
-<!--        v-if="showReloadPageSection || impersonatedUserEmail"-->
-<!--        class="xl:order-2 flex flex-wrap items-center gap-4 mx-auto z-[1] pl-4"-->
-<!--      >-->
-<!--        <div-->
-<!--          v-if="showReloadPageSection"-->
-<!--          class="border-2 border-success box px-4 py-1"-->
-<!--        >-->
-<!--          <span class="mr-8 text-xl text-success">-->
-<!--            Iznākusi jauna sistēmas versija! Lūdzu atjaunojiet lapu!-->
-<!--          </span>-->
-<!--          <button class="btn btn-primary text-lg" @click="reloadPage">-->
-<!--            Atjaunot-->
-<!--          </button>-->
-<!--        </div>-->
+      <div
+        v-if="heartbeatStore.showReloadSection || impersonatedUserEmail"
+        class="flex flex-wrap gap-4 items-center mx-auto pl-4 xl:order-2 z-[1]"
+      >
+        <div
+          v-if="heartbeatStore.showReloadSection"
+          class="border-2 border-success box px-4 py-1"
+        >
+          <span class="mr-8 text-success text-xl">
+            Iznākusi jauna sistēmas versija! Lūdzu atjaunojiet lapu!
+          </span>
+          <button class="btn btn-primary text-lg" @click="reloadPage">
+            Atjaunot
+          </button>
+        </div>
 
-<!--        <div v-if="impersonatedUserEmail" class="py-2 px-4 rounded-md bg-white">-->
-<!--          <button class="btn btn-primary" @click="handleStopImpersonation">-->
-<!--            Beigt uzdoties par lietotāju-->
-<!--            {{ impersonatedUserEmail }}-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
+        <div v-if="impersonatedUserEmail" class="bg-white px-4 py-2 rounded-md">
+          <button class="btn btn-primary" @click="handleStopImpersonation">
+            Beigt uzdoties par lietotāju
+            {{ impersonatedUserEmail }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useHeartbeat } from './heartbeat'
-// import {
-//   impersonatedUserEmail,
-//   stopImpersonation,
-// } from '../../Mixins/Impersonation'
-import Button from '../../Partials/Button.vue'
+import {
+  impersonatedUserEmail,
+  stopImpersonation,
+} from '../../Mixins/Impersonation'
 import { useRouter } from 'vue-router'
-// import { useAuthorization } from '../../Stores/authorization'
-import { useMenu } from '../../Stores/menu'
 import Breadcrumbs from './Breadcrumbs.vue'
 import TimezoneInfo from './TimezoneInfo.vue'
 import ProfileDropdown from './ProfileDropdown.vue'
+import { onMounted } from 'vue'
+import { useHeartbeat } from '../../Stores/heartbeat'
 
 const router = useRouter()
-// const authorizationStore = useAuthorization()
-const menuStore = useMenu()
+const heartbeatStore = useHeartbeat()
 
 const reloadPage = () => window.location.reload()
 
-const { showReloadPageSection } = useHeartbeat()
+const handleStopImpersonation = () => {
+  stopImpersonation()
+  router.currentRoute.value.name === 'CUSTOMERS'
+    ? router.push({ name: 'USERS' })
+    : router.push({ name: 'CUSTOMERS' })
+}
 
 onMounted(() => {
-  menuStore.loadMenu()
+  heartbeatStore.getHeartbeatResponse()
+  setInterval(() => {
+    if (!heartbeatStore.showReloadSection) heartbeatStore.getHeartbeatResponse()
+  }, 10000)
 })
-
-// const handleStopImpersonation = () => {
-//   stopImpersonation()
-//   router.currentRoute.value.name === 'CUSTOMERS'
-//     ? router.push({ name: 'USERS' })
-//     : router.push({ name: 'CUSTOMERS' })
-// }
 </script>
 
 <style lang="scss">
 .logo__image {
-  width: 180px;
+  height: 48px;
+
+  @media (max-width: 768px) {
+    height: 24px;
+  }
 }
 </style>

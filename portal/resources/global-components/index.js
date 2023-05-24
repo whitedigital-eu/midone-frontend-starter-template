@@ -10,7 +10,6 @@ import {
   DropdownFooter,
   DropdownDivider,
 } from './dropdown'
-import LucideIcons from './lucide'
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from './tab'
 
 export default (app) => {
@@ -29,8 +28,4 @@ export default (app) => {
   app.component('Tab', Tab)
   app.component('TabPanels', TabPanels)
   app.component('TabPanel', TabPanel)
-
-  for (const [key, icon] of Object.entries(LucideIcons)) {
-    app.component(key, icon)
-  }
 }

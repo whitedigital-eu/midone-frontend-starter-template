@@ -1,4 +1,5 @@
-/// <reference types="vite/customer" />
+/// <reference types="vite/client" />
+/// <reference types="vue/macros-global" />
 
 declare module '*.vue' {
   import { DefineComponent } from 'vue'
@@ -9,51 +10,6 @@ declare module '*.vue' {
 
 declare module 'tabulator-tables' {
   export = Tabulator
-}
-
-declare module '@dvsl/zoomcharts' {
-  export = ZoomCharts
-  export = ZoomCharts.Configuration
-}
-
-declare module 'vue-signature-pad' {
-  import signature_pad, * as SignaturePad from 'signature_pad'
-  import Vue from 'vue'
-
-  export interface IOptions extends SignaturePad.IOptions {}
-  export interface IPointGroup extends SignaturePad.IPointGroup {}
-
-  export interface Status {
-    isEmpty: boolean
-    data?: any
-  }
-
-  export default class VueSignaturePad extends Vue {
-    // props
-    width: string
-    height: string
-    customStyle: any
-    saveType: string
-    options: IOptions
-    images: any[]
-
-    // computer
-    propsImagesAndCustomImages: any[]
-
-    // methods
-    resizeCanvas(): void
-    saveSignature(): Status
-    undoSignature(): void
-    mergeImageAndSignature(customSignature: any): Promise<any> // TODO: constrain to correct return type.
-    addImages(images: any[]): Promise<any> // TODO: constrain to correct param type and return type.
-    fromDataURL(data: string): void
-    lockSignaturePad(): void
-    openSignaturePad(): void
-    isEmpty(): boolean
-    getPropImagesAndCacheImages(): any[]
-    clearCacheImages(): 'this.cacheImages'
-    clearSignature(): void
-  }
 }
 
 /// <reference types="vite/client" />

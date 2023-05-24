@@ -1,0 +1,17 @@
+export default {
+  createdAt: 'Izveidots',
+  updatedAt: 'Atjaunots',
+  type: 'Tips',
+  title: 'Nosaukums',
+  code: 'Kods',
+  notes: 'Piezīmes',
+  date: 'Datums',
+  value: 'Vērtība',
+  firstName: 'Vārds',
+  lastName: 'Uzvārds',
+  email: 'E-pasts',
+  phone: 'Telefona nr.',
+  address: 'Adrese',
+  add: 'Pievienot',
+  status: 'Statuss',
+}

@@ -1,18 +1,18 @@
 <template>
-  <Dropdown class="intro-x w-8 h-8">
+  <Dropdown class="h-8 intro-x w-8">
     <DropdownToggle
-      tag="div"
-      role="button"
-      class="w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in scale-110 bg-white"
       ref="dropdownToggle"
+      class="bg-white h-8 image-fit overflow-hidden rounded-full scale-110 shadow-lg w-8 zoom-in"
+      role="button"
+      tag="div"
     >
-      <UserIcon class="m-1" />
+      <Icon class="m-1" name="User" />
     </DropdownToggle>
     <DropdownMenu class="w-56">
       <DropdownContent
-        class="bg-primary/80 before:block before:absolute before:bg-black before:inset-0 before:rounded-md before:z-[-1] text-white"
+        class="before:absolute before:bg-black before:block before:inset-0 before:rounded-md before:z-[-1] bg-primary/80 text-white"
       >
-        <DropdownHeader tag="div" class="!font-normal" v-if="currentUserData">
+        <DropdownHeader v-if="currentUserData" class="!font-normal" tag="div">
           <div>
             <div class="font-medium">
               {{ currentUserData.firstName }}
@@ -20,13 +20,13 @@
             </div>
           </div>
         </DropdownHeader>
-        <DropdownDivider class="border-white/[0.08]" v-if="currentUserData" />
+        <DropdownDivider v-if="currentUserData" class="border-white/[0.08]" />
         <DropdownItem
           class="dropdown-item hover:bg-white/5"
           @click="dropdownToggle.$el.click()"
         >
-          <router-link :to="{ name: 'PROFILE' }" class="flex">
-            <UserCogIcon class="w-4 h-4 mr-2" />
+          <router-link class="flex" :to="{ name: 'PROFILE' }">
+            <Icon class="h-4 mr-2 w-4" name="UserCog" />
             <span>Mans profils</span>
           </router-link>
         </DropdownItem>
@@ -40,7 +40,7 @@
           "
         >
           <span class="flex gap-2">
-            <KeyIcon class="w-4 h-4" />
+            <Icon class="h-4 w-4" name="Key" />
             <span>Mainīt paroli</span>
           </span>
         </DropdownItem>
@@ -48,7 +48,7 @@
           class="dropdown-item hover:bg-white/5"
           @click="handleLogOff"
         >
-          <ToggleRightIcon class="w-4 h-4 mr-2" />
+          <Icon class="h-4 mr-2 w-4" name="ToggleRight" />
           Atteikties
         </DropdownItem>
       </DropdownContent>
@@ -62,32 +62,31 @@
 </template>
 
 <script setup lang="ts">
-// import { currentIdentity, logOff } from '../../Mixins/Auth'
+import { currentIdentity, logOff } from '../../Mixins/Auth'
 import { ref, watch } from 'vue'
-// import { User } from '../../Types/User'
-// import UserRepository from '../../Repositories/UserRepository'
-// import ChangePasswordFormModal from '../Forms/ChangePasswordFormModal.vue'
+import { User } from '../../Types/User'
+import UserRepository from '../../Repositories/UserRepository'
+import ChangePasswordFormModal from '../Forms/ChangePasswordFormModal.vue'
+import Icon from '../Common/Icons/Icon.vue'
 
 const dropdownToggle = ref()
 
 const handleLogOff = () => {
   dropdownToggle.value.$el.click()
-  // logOff()
+  logOff()
 }
 
-// const currentUserData = ref<User | null>(null)
+const currentUserData = ref<User | null>(null)
 
-// watch(
-//   currentIdentity,
-//   async (newVal, oldVal) => {
-//     if (newVal && newVal?.user !== oldVal?.user) {
-//       currentUserData.value = await UserRepository.get(newVal.user)
-//       // menuStore.loadMenu()
-//       // authorizationStore.loadResourcePermissions()
-//     }
-//   },
-//   { immediate: true }
-// )
-//
-// const showChangePasswordModal = ref(false)
+watch(
+  currentIdentity,
+  async (newVal, oldVal) => {
+    if (newVal && newVal?.user !== oldVal?.user) {
+      currentUserData.value = await UserRepository.get(newVal.user)
+    }
+  },
+  { immediate: true }
+)
+
+const showChangePasswordModal = ref(false)
 </script>

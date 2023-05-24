@@ -36,12 +36,12 @@ import dom from '@left4code/tw-starter/dist/js/dom'
     dom(el).addClass('active').attr('aria-selected', true)
 
     // Set active tab content
-    let elementId = dom(el).attr('data-tw-target')
-    let tabContent = dom(elementId).closest('.tab-content')
+    const elementId = dom(el).attr('data-tw-target')
+    const tabContent = dom(elementId).closest('.tab-content')
     let tabContentWidth = tabContent.width()
 
     if (tabContent[0]) {
-      let computedStyle = window.getComputedStyle(tabContent[0])
+      const computedStyle = window.getComputedStyle(tabContent[0])
 
       if (
         (computedStyle && computedStyle.borderLeftWidth) ||

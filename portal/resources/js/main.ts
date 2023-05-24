@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
@@ -12,7 +12,6 @@ import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 //@ts-ignore
 import globalComponents from '../global-components/'
-import VueSignaturePad from 'vue-signature-pad'
 import * as Sentry from '@sentry/vue'
 import { BrowserTracing } from '@sentry/tracing'
 
@@ -27,8 +26,10 @@ dayjs.extend(timezone)
 import '../css/app.css'
 
 const pinia = createPinia()
+//@ts-ignore
+pinia.use(({ store }) => (store.router = markRaw(router)))
 // @ts-ignore
-const app = createApp(App).use(router).use(VueSignaturePad).use(pinia)
+const app = createApp(App).use(router).use(pinia)
 
 globalComponents(app)
 
@@ -39,7 +40,6 @@ if (import.meta.env.PROD) {
     integrations: [
       new BrowserTracing({
         routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-        tracingOrigins: ['staging-serviss.v1s.lv', /^\//],
       }),
     ],
     tracesSampleRate: 0,

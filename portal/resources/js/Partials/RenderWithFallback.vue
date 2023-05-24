@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { dateTimeIntervalToHumanReadableString } from '../Helpers/DateTime'
-import { RENDER_FORMAT } from './renderFormat'
+import {RENDER_FORMAT} from "../Helpers/Global";
 
 const props = defineProps<{
   variableToRender?: string | number | null

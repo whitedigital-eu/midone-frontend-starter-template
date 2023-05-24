@@ -65,16 +65,6 @@ const init = (el, { props, emit }) => {
 // Tab wrapper
 const TabGroup = defineComponent({
   name: 'TabGroup',
-  props: {
-    selectedIndex: {
-      type: Number,
-      default: 0,
-    },
-    tag: {
-      type: String,
-      default: 'div',
-    },
-  },
   directives: {
     tab: {
       mounted(el, { value }) {
@@ -85,7 +75,17 @@ const TabGroup = defineComponent({
       },
     },
   },
-  setup(props, { slots, attrs, emit }) {
+  props: {
+    selectedIndex: {
+      type: Number,
+      default: 0,
+    },
+    tag: {
+      type: String,
+      default: 'div',
+    },
+  },
+  setup(props, { slots, _, emit }) {
     const tabDirective = resolveDirective('tab')
     return () =>
       withDirectives(h(props.tag, slots.default()), [
@@ -97,7 +97,7 @@ const TabGroup = defineComponent({
 // Tab wrapper
 const TabList = defineComponent({
   name: 'TabList',
-  setup(props, { slots, attrs, emit }) {
+  setup(props, { slots }) {
     return () =>
       h(
         'ul',
@@ -126,7 +126,7 @@ const Tab = defineComponent({
       default: '',
     },
   },
-  setup(props, { slots, attrs, emit }) {
+  setup(props, { slots }) {
     return () =>
       h(
         'li',
@@ -151,7 +151,7 @@ const Tab = defineComponent({
 
 const TabPanels = defineComponent({
   name: 'TabPanels',
-  setup(props, { slots, attrs, emit }) {
+  setup(props, { slots }) {
     return () =>
       h(
         'div',
@@ -165,7 +165,7 @@ const TabPanels = defineComponent({
 
 const TabPanel = defineComponent({
   name: 'TabPanel',
-  setup(props, { slots, attrs, emit }) {
+  setup(props, { slots }) {
     return () =>
       h(
         'div',

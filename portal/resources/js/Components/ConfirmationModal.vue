@@ -1,31 +1,31 @@
 <template>
-  <Modal @close="emit('close')" data-test="confirmation-modal">
+  <Modal data-test="confirmation-modal" @close="emit('close')">
     <template #header>
       <div class="text-2xl">Vai esi pārliecināts?</div>
     </template>
     <template #body>
-      <div class="text-slate-500 my-4" v-if="!customTitle">
+      <div v-if="!customTitle" class="my-4 text-slate-500">
         Vai tiešām vēlies dzēst {{ title }}?
       </div>
-      <div v-else class="text-slate-500 my-4">
+      <div v-else class="my-4 text-slate-500">
         {{ customTitle }}
       </div>
     </template>
     <template #footer>
       <div class="flex gap-4">
         <button
-          type="button"
           class="btn btn-outline-secondary w-full"
           data-test="cancel-button"
+          type="button"
           @click="emit('close')"
         >
           Atcelt
         </button>
         <button
-          type="button"
           class="btn btn-danger w-full"
-          data-tw-dismiss="modal"
           data-test="delete-button"
+          data-tw-dismiss="modal"
+          type="button"
           @click.prevent="emit('confirm')"
         >
           Dzēst
@@ -38,16 +38,13 @@
 <script setup lang="ts">
 import Modal from '../Partials/Modal/Modal.vue'
 
-const props = withDefaults(
-  defineProps<{
-    title?: string
-    customTitle?: string | null
-  }>(),
-  {
-    title: '',
-    customTitle: null,
-  }
-)
+const { title = '', customTitle = null } = defineProps<{
+  title?: string
+  customTitle?: string | null
+}>()
 
-const emit = defineEmits(['close', 'confirm'])
+const emit = defineEmits<{
+  (e: 'close'): void
+  (e: 'confirm'): void
+}>()
 </script>

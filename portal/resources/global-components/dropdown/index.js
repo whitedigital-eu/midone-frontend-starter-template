@@ -45,6 +45,16 @@ const init = (el, { props, emit }) => {
 // Dropdown wrapper
 const Dropdown = defineComponent({
   name: 'Dropdown',
+  directives: {
+    dropdown: {
+      mounted(el, { value }) {
+        init(el, value)
+      },
+      updated(el, { value }) {
+        init(el, value)
+      },
+    },
+  },
   props: {
     show: {
       type: Boolean,
@@ -57,16 +67,6 @@ const Dropdown = defineComponent({
     refKey: {
       type: String,
       default: null,
-    },
-  },
-  directives: {
-    dropdown: {
-      mounted(el, { value }) {
-        init(el, value)
-      },
-      updated(el, { value }) {
-        init(el, value)
-      },
     },
   },
   setup(props, { slots, attrs, emit }) {

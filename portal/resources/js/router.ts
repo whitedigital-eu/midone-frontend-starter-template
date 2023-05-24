@@ -1,5 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { routes, DEFAULT_ROUTES } from './routes'
+import {
+  GUEST_DEFAULT_ROUTE,
+  ROUTE_NAME,
+  routes,
+} from './routes'
+
+import { currentIdentity, loadCurrentIdentity } from './Mixins/Auth'
+import { useMenu } from './Stores/menu'
 
 const isPositiveInteger = (s: string) => {
   const num = Number(s)
@@ -14,18 +21,27 @@ const router = createRouter({
   },
 })
 
-// router.beforeEach(async (to) => {
-//   await loadCurrentIdentity()
-//
-//   if (to.meta.requiresAuth) {
-//     if (!currentIdentity.value) return { name: DEFAULT_ROUTES.guest }
-//   } else if (currentIdentity.value && currentIdentityDefaultRoute.value) {
-//     return { name: currentIdentityDefaultRoute.value }
-//   }
-//
-//   if (typeof to.params.id === 'string' && !isPositiveInteger(to.params.id)) {
-//     return { name: DEFAULT_ROUTES.authenticated }
-//   }
-// })
+router.beforeEach(async (to) => {
+  const menuStore = useMenu()
+  if (!currentIdentity.value) await loadCurrentIdentity()
+
+  if (to.meta.requiresAuth) {
+    if (!currentIdentity.value) return { name: GUEST_DEFAULT_ROUTE }
+    if (!menuStore.menu) await menuStore.loadMenu()
+  } else if (currentIdentity.value) {
+    if (!menuStore.menu) await menuStore.loadMenu()
+    if (menuStore.firstMenuItemRouteName) {
+      return { name: menuStore.firstMenuItemRouteName }
+    }
+  }
+
+  if (
+    typeof to.params.id === 'string' &&
+    !isPositiveInteger(to.params.id) &&
+    menuStore.firstMenuItemRouteName
+  ) {
+    return { name: menuStore.firstMenuItemRouteName }
+  }
+})
 
 export default router

@@ -1,10 +1,10 @@
 <template>
   <Teleport to="body">
     <div
+      aria-hidden="false"
       class="modal overflow-y-auto"
       :class="{ show: visible }"
       tabindex="-1"
-      aria-hidden="false"
       v-bind="$attrs"
       @keydown.esc="handleCloseClick"
     >
@@ -14,30 +14,30 @@
         :style="[customWidth ? `width: ${customWidth}px` : '']"
       >
         <div class="modal-content relative">
-          <section class="modal-header bg-white z-[5] rounded-md" ref="header">
-            <slot name="header" />
+          <section ref="header" class="bg-white modal-header rounded-md z-[5]">
+            <slot name="header"></slot>
             <a
               v-if="showClose"
               class="cursor-pointer ml-auto"
               data-test="modal-close-btn"
               @click="handleCloseClick"
             >
-              <XIcon class="w-8 h-8 text-slate-400" />
+              <Icon class="h-8 text-slate-400 w-8" name="X" />
             </a>
           </section>
           <section
-            class="modal-body py-0 overflow-y-scroll"
+            class="modal-body overflow-y-scroll py-0"
             :class="bodyClass"
             :style="computedBodyStyle"
           >
-            <slot name="body" />
+            <slot name="body"></slot>
           </section>
           <section
             v-if="showFooter"
-            class="modal-footer w-full bg-white z-[9] rounded-md"
             ref="footer"
+            class="bg-white modal-footer rounded-md w-full z-[9]"
           >
-            <slot name="footer" />
+            <slot name="footer"></slot>
           </section>
         </div>
       </div>
@@ -49,6 +49,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import useModalBodyHeight from './useModalBodyHeight'
 import { isMobile } from '../../Helpers/Mobile'
+import Icon from '../../Components/Common/Icons/Icon.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -67,6 +68,7 @@ const props = withDefaults(
   }
 )
 
+const emit = defineEmits<{ (e: 'close'): void }>()
 const header = ref<HTMLElement>()
 const footer = ref<HTMLElement>()
 
@@ -97,8 +99,6 @@ const sizeClass = computed(() => {
 })
 
 const visible = ref(false)
-
-const emit = defineEmits(['close'])
 
 const handleCloseClick = () => {
   visible.value = false
@@ -159,7 +159,7 @@ by clicking on element with data-tw-toggle="modal" attribute */
     }
     .modal-content {
       border-radius: 0;
-      height: 100vh;
+      height: max(100vh, 100%);
     }
 
     &.show {

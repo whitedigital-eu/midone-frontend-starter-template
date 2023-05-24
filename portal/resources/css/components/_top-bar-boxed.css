@@ -27,6 +27,6 @@
     }
     &:after {
         content: "";
-        @apply absolute inset-0 min-h-[65px] mx-3 bg-primary mt-5 rounded-xl shadow-md hidden md:block dark:bg-darkmode-600;
+        @apply custom-bg-gray absolute inset-0 min-h-[65px] mx-3 bg-primary mt-5 rounded-xl shadow-md hidden md:block dark:bg-darkmode-600;
     }
 }
