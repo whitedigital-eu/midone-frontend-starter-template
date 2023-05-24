@@ -1,5 +1,5 @@
 html {
-    @apply custom-bg-gray md:bg-slate-200;
+    @apply md:bg-slate-200;
     &.dark {
         @apply bg-darkmode-800;
         body {

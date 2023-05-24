@@ -17,7 +17,7 @@ module.exports = {
     extend: {
       colors: {
         rgb: toRGB(colors),
-        primary: '#FBB300',
+        primary: withOpacityValue('--color-primary'),
         secondary: withOpacityValue('--color-secondary'),
         success: withOpacityValue('--color-success'),
         info: withOpacityValue('--color-info'),
@@ -26,7 +26,6 @@ module.exports = {
         danger: withOpacityValue('--color-danger'),
         light: withOpacityValue('--color-light'),
         dark: withOpacityValue('--color-dark'),
-        'custom-bg-gray': '#3C3B3B',
         slate: {
           50: withOpacityValue('--color-slate-50'),
           100: withOpacityValue('--color-slate-100'),
